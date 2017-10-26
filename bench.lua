@@ -1,7 +1,7 @@
 local Cmwc = require('cmwc')
 local crandom = Cmwc.random
 local random = math.random
-local N = 1e7
+local N = 1e8
 
 print( 'benchmarking persistent CMWC4096 vs builtin math.random' )
 local x = 0
@@ -15,10 +15,10 @@ local t1 = os.clock() - t
 print( 'Builtin', N / t1, 'OP/S' )
 
 collectgarbage()
-local qc, i, c = Cmwc.make()
+local qc, i = Cmwc.make()
 local t = os.clock()
 for j = 1, N do
-	qc, x = crandom( qc )
+	x, qc, i = crandom( qc, i )
 end
 local t2 = os.clock() - t
 print( 'PCMWC', N / t2, 'OP/S' )
