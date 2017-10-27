@@ -70,4 +70,27 @@ function Cmwc.random( qc, i, min, max )
 	end
 end
 
+function Cmwc.randomdouble( qc, i, min, max )
+	local a = qc[i]
+	qc, i = nextstate( qc, i )
+	a, qc, i = (a*67108864.0+qc[i])*(1.0/9007199254740992.0), nextstate( qc, i )
+	if max == nil then
+		if min == nil then
+			return a, qc, i
+		elseif min >= 1 then
+			return a * floor( min ) + 1, qc, i
+		else
+			error( 'bad argument #1 to \'random\' (interval is empty)' )
+		end
+	else
+		if min < max then
+			return q * floor( max - min ) + min, qc, i
+		elseif min == max then
+			return min, qc, i
+		else
+			error( 'bad argument #2 to \'random\' (interval is empty)' )
+		end
+	end
+end
+
 return Cmwc
