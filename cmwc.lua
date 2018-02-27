@@ -3,9 +3,7 @@ local floor = math.floor
 local Cmwc = {}
 
 local zeros4097 = (function()
-	local t = {}
-	for i = 1, 4097 do t[i] = 0 end
-	return (loadstring or load)( 'return {' .. table.concat( t, ',' ) .. '}' )
+	return (loadstring or load)( 'return {0' .. (',0'):rep(4096) .. '}' )
 end)()
 
 function Cmwc.make( c )
@@ -50,7 +48,7 @@ local function nextstate( qc, i )
 	end
 end
 
-function Cmwc.random( qc, i, min, max )
+function Cmwc.random32( qc, i, min, max )
 	if max == nil then
 		if min == nil then
 			return qc[i] / 4294967296.0, nextstate( qc, i )
@@ -70,7 +68,7 @@ function Cmwc.random( qc, i, min, max )
 	end
 end
 
-function Cmwc.randomdouble( qc, i, min, max )
+function Cmwc.random64( qc, i, min, max )
 	local a = qc[i]
 	qc, i = nextstate( qc, i )
 	a, qc, i = (a*67108864.0+qc[i])*(1.0/9007199254740992.0), nextstate( qc, i )
