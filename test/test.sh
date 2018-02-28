@@ -13,7 +13,7 @@ if [ -z $N ]; then
 	exit 1
 fi
 
-gcc test/test.c
-./a.out $SEED $N > test/c_result.txt
+gcc -std=c99 -o test/ctest test/test.c
+./test/ctest $SEED $N > test/c_result.txt
 lua test/test.lua $SEED $N > test/lua_result.txt
 diff test/c_result.txt test/lua_result.txt
