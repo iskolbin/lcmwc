@@ -10,4 +10,4 @@ before_install:
   - sudo apt install luajit lua5.1 lua5.2
 
 script:
-  - ./test/test.sh
+  - ./test/test.sh 433494437 100000
