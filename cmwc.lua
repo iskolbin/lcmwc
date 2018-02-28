@@ -6,9 +6,33 @@ local zeros4097 = (function()
 	return (loadstring or load)( 'return {0' .. (',0'):rep(4096) .. '}' )
 end)()
 
-function Cmwc.make( c )
+local function nextstate( qc, i, newqc )
+	if i < 4096 then
+		return qc, i + 1
+	else
+		local c = qc[4097]
+		newqc = newqc or zeros4097()
+		for j = 1, 4096 do
+			local t = 18782 * qc[j] + c
+			c = floor( t / 4294967296 )
+			local x = (t + c) % 0x100000000
+			if x < c then
+				x, c = x + 1, c + 1
+			end
+			if x > 0xfffffffe then
+				newqc[j] = 8589934590 - x
+			else
+				newqc[j] = 0xfffffffe - x
+			end
+		end
+		newqc[4097] = c
+		return newqc, 1
+	end
+end
+
+function Cmwc.make( seed )
 	local qc = zeros4097()
-	c = c or 433494437
+	local c = seed or 433494437
 	for i = 1, 4097 do
 		c = c * 129749
 		c = c % 0x100000000
@@ -18,34 +42,11 @@ function Cmwc.make( c )
 		qc[i] = c
 	end
 	qc[4097] = c % 809430660
-	return qc, 1
+	return nextstate( qc, 4096, qc )
 end
 
-local function nextstate( qc, i )
-	if i < 4096 then
-		return qc, i + 1
-	else
-		local qc, c = qc, qc[4097]
-		local newqc = zeros4097()
-		for j = 1, 4096 do
-			local t = 18782 * qc[j] + c
-			c = floor( t / 4294967296 )
-			local x = (t + c) % 0x100000000
-			if x < c then
-				x, c = x + 1, c + 1
-			end
-			if x == 0xffffffff then
-				x, c = 0, c + 1
-			end
-			local q = 0xfffffffe - x
-			if  q < 0 then
-				q = q + 0x100000000
-			end
-			newqc[j] = q
-		end
-		newqc[4097] = c
-		return newqc, 1
-	end
+function Cmwc.rand( qc, i )
+	return qc[i], nextstate( qc, i )
 end
 
 function Cmwc.random32( qc, i, min, max )
