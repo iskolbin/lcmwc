@@ -1,7 +1,17 @@
 #!/bin/bash
 
-SEED=433494437 
-N=10
+SEED=$1
+N=$2
+
+if [ -z $SEED ]; then
+	echo "Seed is not specified"
+	exit 1
+fi
+
+if [ -z $N ]; then
+	echo "Count of items to generate is not specified"
+	exit 1
+fi
 
 gcc test/test.c
 ./a.out $SEED $N > test/c_result.txt

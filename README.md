@@ -1,3 +1,6 @@
+[![license](https://img.shields.io/badge/license-public%20domain-blue.svg)](http://unlicense.org/)
+[![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
+
 Lua Persistent CMWC-4096 PRNG
 =============================
 
@@ -15,18 +18,23 @@ https://en.wikipedia.org/wiki/Linear_congruential_generator) and is borrowed
 from [libtcod](http://roguecentral.org/doryen/libtcod/) sources. Returns state
 and initial index (1)
 
-Cmwc.random( state: number[4097], index: nubmer, min: number, max: number )
----------------------------------------------------------------------------
+Cmwc.rand( state: number[4097] )
+--------------------------------
 
-Generate new pseudorandom number and update state. Returns 3 values: updated
-state, next index, and generated number. This function API tries to somehow
-mimic one from the original Lua
+Generates unsigned 32-bits integer, returns number, updated state, new index
 
-Cmwc.randomdouble( state: number[4097], index: nubmer, min: number, max: number )
----------------------------------------------------------------------------------
+Cmwc.random32( state: number[4097], index: nubmer, min: number, max: number )
+-----------------------------------------------------------------------------
 
-Takes 2 numbers from the state to create 53-bit resolution float. This is
-much more precise than `Cmwc.random` but 2 times slower
+Generates new pseudorandom number and update state. Returns 3 values: number,
+updated state, next index. This function API tries to somehow mimic one from
+the original Lua
+
+Cmwc.random64( state: number[4097], index: nubmer, min: number, max: number )
+-----------------------------------------------------------------------------
+
+Takes 2 numbers from the state to create double float. This is much more precise
+than `Cmwc.random32` but 2 times slower
 
 Performance
 ===========
