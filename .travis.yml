@@ -1,0 +1,13 @@
+dist: trusty
+sudo: true
+language: lua
+compiler: gcc
+
+notifications:
+  email: false
+
+before_install:
+  - sudo apt install luajit lua5.1 lua5.2
+
+script:
+  - ./test/test.sh

@@ -18,6 +18,7 @@ static void initCmwc( struct cmwc_state *state, uint32_t seed ) {
 		state->Q[i] = c;
 	}
 	state->c = (c * 1103515245 + 12345) % 809430660;	
+	state->i = CMWC_CYCLE-1;
 }
 
 static uint32_t randCmwc( struct cmwc_state *state ) {
