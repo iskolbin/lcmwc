@@ -1,6 +1,6 @@
 --[[
 
- cmwc4096 -- v0.2.0 public domain Lua persistent CMWC4096 PRNG
+ cmwc4096 -- v0.3.0 public domain Lua persistent CMWC4096 PRNG
  no warranty implied; use at your own risk
 
  author: Ilya Kolbin (iskolbin@gmail.com)
@@ -30,7 +30,7 @@ local floor = math.floor
 local Cmwc = {}
 
 local zeros4097 = (function()
-	return (loadstring or load)( 'return {0' .. (',0'):rep(4096) .. '}' )
+	return (_G.loadstring or load)( 'return {0' .. (',0'):rep(4096) .. '}' )
 end)()
 
 local function nextstate( qc, i, newqc )
@@ -41,7 +41,7 @@ local function nextstate( qc, i, newqc )
 		newqc = newqc or zeros4097()
 		for j = 1, 4096 do
 			local t = 18782 * qc[j] + c
-			c = floor( t / 4294967296 )
+			c = floor( t * (1 / 4294967296 ))
 			local x = (t + c) % 0x100000000
 			if x < c then
 				x, c = x + 1, c + 1
@@ -79,7 +79,7 @@ end
 function Cmwc.random32( qc, i, min, max )
 	if max == nil then
 		if min == nil then
-			return qc[i] / 4294967296.0, nextstate( qc, i )
+			return qc[i] * (1/4294967296.0), nextstate( qc, i )
 		elseif min >= 1 then
 			return qc[i] % floor( min ) + 1, nextstate( qc, i )
 		else
@@ -97,20 +97,21 @@ function Cmwc.random32( qc, i, min, max )
 end
 
 function Cmwc.random64( qc, i, min, max )
-	local a = qc[i]
+	local a = qc[i] * 67108864
 	qc, i = nextstate( qc, i )
-	a, qc, i = (a*67108864.0+qc[i])*(1.0/9007199254740992.0), nextstate( qc, i )
+	a = a + qc[i]
+	qc, i = nextstate( qc, i )
 	if max == nil then
 		if min == nil then
-			return a, qc, i
+			return a * (1.0/9007199254740992.0), qc, i
 		elseif min >= 1 then
-			return a * floor( min ) + 1, qc, i
+			return a % floor( min ) + 1, qc, i
 		else
 			error( 'bad argument #1 to \'random\' (interval is empty)' )
 		end
 	else
 		if min < max then
-			return q * floor( max - min ) + min, qc, i
+			return a % floor( max - min ) + min, qc, i
 		elseif min == max then
 			return min, qc, i
 		else
