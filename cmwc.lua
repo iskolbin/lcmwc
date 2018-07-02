@@ -41,7 +41,7 @@ local function nextstate( qc, i, newqc )
 		newqc = newqc or zeros4097()
 		for j = 1, 4096 do
 			local t = 18782 * qc[j] + c
-			c = floor( t * (1 / 4294967296 ))
+			c = floor( t * (1.0/4294967296.0))
 			local x = (t + c) % 0x100000000
 			if x < c then
 				x, c = x + 1, c + 1
