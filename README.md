@@ -32,7 +32,7 @@ the [original Lua](https://www.lua.org/manual/5.3/manual.html).
 
 ### Cmwc.random64( state: number[4097], index: number, min: number, max: number )
 
-Takes 2 numbers from the state to create double float. This is much more precise
+Takes 2 numbers from the state to create pseudorandom number. This is much more precise
 than `Cmwc.random32` but 2 times slower
 
 Performance
