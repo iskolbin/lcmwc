@@ -11,28 +11,26 @@ Lua persistent pseudo random number generator. Internally based on
 very performant (original algorithm of course). Includes versions for 32 and 53
 bits precision floats.
 
-Cmwc.make( seed: number )
--------------------------
+### Cmwc.make( seed: number )
 
 Create new CMWC-4096 PRNG state. Initialization procedure is based on [LCG](
 https://en.wikipedia.org/wiki/Linear_congruential_generator) and is borrowed
 from [libtcod](http://roguecentral.org/doryen/libtcod/) sources. Returns state
 and initial index (1)
 
-Cmwc.rand( state: number[4097] )
---------------------------------
+### Cmwc.rand( state: number[4097], index: number )
 
 Generates unsigned 32-bits integer, returns number, updated state, new index
 
-Cmwc.random32( state: number[4097], index: number, min: number, max: number )
------------------------------------------------------------------------------
+### Cmwc.random32( state: number[4097], index: number, min: number, max: number )
 
 Generates new pseudorandom number and update state. Returns 3 values: number,
 updated state, next index. This function API tries to somehow mimic one from
-the original Lua
+the [original Lua](https://www.lua.org/manual/5.3/manual.html).
 
-Cmwc.random64( state: number[4097], index: number, min: number, max: number )
------------------------------------------------------------------------------
+>When called without arguments, returns a pseudo-random float with uniform distribution in the range [0,1). When called with two integers m and n, math.random returns a pseudo-random integer with uniform distribution in the range [m, n]. (The value n-m cannot be negative and must fit in a Lua integer.) The call math.random(n) is equivalent to math.random(1,n).
+
+### Cmwc.random64( state: number[4097], index: number, min: number, max: number )
 
 Takes 2 numbers from the state to create double float. This is much more precise
 than `Cmwc.random32` but 2 times slower
