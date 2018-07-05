@@ -10,9 +10,17 @@ env:
   - LUA="luajit 2.0"
   - LUA="luajit 2.1"
 
+before_install:
+  - pip install hererocks
+  - hererocks env --$LUA -rlatest    # Use latest LuaRocks, install into 'env' directory.
+  - source env/bin/activate          # Add directory with all installed binaries to PATH.notifications:
+
 notifications:
   email: false
 
+install:
+  - luarocks install luacheck
+
 script:
-  - luacheck --no-unused-args *.lua
+  - luacheck *.lua
   - ./test/test.sh 433494437 100000
