@@ -1,13 +1,18 @@
 dist: trusty
-sudo: true
-language: lua
+sudo: false
+language: python
 compiler: gcc
+
+env:
+  - LUA="lua 5.1"
+  - LUA="lua 5.2"
+  - LUA="lua 5.3"
+  - LUA="luajit 2.0"
+  - LUA="luajit 2.1"
 
 notifications:
   email: false
 
-before_install:
-  - sudo apt install luajit lua5.1 lua5.2
-
 script:
+  - luacheck --no-unused-args *.lua
   - ./test/test.sh 433494437 100000
